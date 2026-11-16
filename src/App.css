@@ -1,0 +1,556 @@
+.app {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+}
+
+.num {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+/* 頁首 */
+.app-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: 48px;
+}
+
+.app-head h1 {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+html[lang^='zh'] .app-head h1 {
+  letter-spacing: -0.02em;
+}
+
+/* 語言選單：小而安靜，不搶標題的視覺重心 */
+.lang-select {
+  flex: none;
+  padding: 2px 20px 2px 0;
+  border-bottom-color: var(--color-line-strong);
+  color: var(--color-fg-soft);
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: normal;
+  cursor: pointer;
+}
+
+.lang-select:hover {
+  border-bottom-color: var(--color-fg);
+  color: var(--color-fg);
+}
+
+/* 按鈕：預設是帶底線的文字連結 */
+button {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  border-radius: var(--radius-none);
+  background: none;
+  color: var(--color-fg);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+button:hover {
+  color: var(--color-fg-soft);
+}
+
+button.primary {
+  padding: 12px 24px;
+  border: 0;
+  background: var(--color-fg);
+  color: var(--color-bg);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+button.primary:hover {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+/* 分段選擇：純文字，選中者加底線 */
+.segmented {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.segmented button {
+  padding-bottom: 2px;
+  border-bottom-color: transparent;
+  color: var(--color-fg-soft);
+}
+
+.segmented button:hover {
+  color: var(--color-fg);
+}
+
+.segmented button.active {
+  border-bottom-color: var(--color-fg);
+  color: var(--color-fg);
+}
+
+/* 分頁 */
+.tabs {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.tabs button {
+  margin-bottom: -1px;
+  padding: 0 0 12px;
+  border-bottom-color: transparent;
+  color: var(--color-fg-soft);
+  font-size: 15px;
+}
+
+.tabs button:hover {
+  color: var(--color-fg);
+}
+
+.tabs button.active {
+  border-bottom-color: var(--color-fg);
+  color: var(--color-fg);
+}
+
+/* 區塊：沒有卡片，只有 hairline 與留白 */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.card {
+  padding-top: 24px;
+  border-top: 1px solid var(--color-line);
+}
+
+.card h2 {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.card h2 small {
+  color: var(--color-fg-soft);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: 20px;
+}
+
+/* 結果區的按鈕：分享 / 下載；分享失敗的提示顯示在按鈕下方 */
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+}
+
+.card-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  /* 上下（換行時）12px，左右 32px */
+  gap: 12px var(--space-md);
+}
+
+.card-actions .error {
+  text-align: right;
+}
+
+/*
+ * 結果標題 + 觸控裝置上的說明疊在左邊，按鈕在右邊同一排（寬版面右側不留白）。
+ * 左邊至少要有 240px 寬，不夠時按鈕才換到下一行（手機上則是標題 → 說明 → 按鈕）
+ */
+.card-head-text {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.card-head-text .hint {
+  margin: var(--space-xs) 0 0;
+}
+
+.card-head .card-actions {
+  margin-left: auto;
+}
+
+/* 頁尾：隱私設定（只在可用 GA 的環境顯示），讓使用者隨時能重新選擇 */
+.app-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-line);
+}
+
+.app-foot button {
+  color: var(--color-fg-soft);
+  font-size: 13px;
+}
+
+/* 同意橫幅：固定在畫面底部，一條細線與留白，沒有陰影 */
+.consent {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  border-top: 1px solid var(--color-fg);
+  background: var(--color-bg);
+}
+
+.consent-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm) var(--space-md);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.consent-inner p {
+  flex: 1 1 360px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.consent-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-md);
+  margin-left: auto;
+}
+
+/* 沒有分享按鈕時（只剩下載），下載按鈕也要靠右 */
+.card-actions-row .primary {
+  margin-left: auto;
+}
+
+.card-head h2 {
+  margin: 0;
+}
+
+/* 上傳區 */
+/* 上傳區是整頁唯一的「卡片」：虛線框 + 微灰底 + 圖示，引導使用者操作 */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px var(--space-md);
+  border: 1.5px dashed var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-soft);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.dropzone:hover,
+.dropzone.dragging {
+  border-color: var(--color-fg);
+}
+
+.dropzone.dragging {
+  background: var(--color-line);
+}
+
+.dropzone:focus-visible {
+  outline-offset: 4px;
+}
+
+.dropzone-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: var(--space-sm);
+  color: var(--color-fg-soft);
+}
+
+.dropzone:hover .dropzone-icon,
+.dropzone.dragging .dropzone-icon {
+  color: var(--color-fg);
+}
+
+.dropzone p {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.dropzone span {
+  color: var(--color-fg-soft);
+  font-size: 14px;
+}
+
+/* 設定欄位 */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) 48px;
+}
+
+.options label,
+.options .field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  color: var(--color-fg-soft);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.options input[type='number'] {
+  width: 120px;
+  height: 32px;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-fg);
+  border-radius: var(--radius-none);
+  background: transparent;
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.options input[type='number']:focus-visible {
+  outline: none;
+  border-bottom-width: 2px;
+  padding-bottom: 3px;
+}
+
+/* 設定欄位裡的分段選擇：和標題之間留一點空隙，換行時列距小一點 */
+.options .segmented {
+  flex-wrap: wrap;
+  gap: 4px var(--space-md);
+  min-height: 32px;
+  align-items: center;
+}
+
+.options .field > button {
+  align-self: flex-start;
+  color: var(--color-fg-soft);
+  font-size: 13px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.options .field > button:hover {
+  color: var(--color-fg);
+}
+
+select {
+  padding: 4px 24px 4px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-fg);
+  border-radius: var(--radius-none);
+  background: transparent;
+}
+
+/* 下拉選單聚焦時不顯示外框，改成底線加粗（總高度不變，不會位移） */
+select:focus-visible {
+  outline: none;
+  border-bottom-width: 2px;
+  padding-bottom: 3px;
+}
+
+.lang-select:focus-visible {
+  padding-bottom: 1px;
+  border-bottom-color: var(--color-fg);
+}
+
+/* 設定欄位旁的數值（例如品質）要看得清楚，比小標題大 */
+.options label .num {
+  color: var(--color-fg);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* 文字 */
+.hint {
+  margin: var(--space-sm) 0 0;
+  color: var(--color-fg-soft);
+  font-size: 14px;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 14px;
+}
+
+.rejected {
+  margin-top: var(--space-sm);
+}
+
+/* 壓縮結果的增減：不用顏色，只用字重與正負號 */
+.good {
+  color: var(--color-fg-soft);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.bad {
+  color: var(--color-fg);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.summary {
+  margin: 0 0 var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+/* 標題下方的隱私說明（整站最重要的一句話，所以放在最上面） */
+.privacy {
+  margin: -24px 0 var(--space-md);
+}
+
+/* 影片預覽與結果：直接顯示 <video>，不加邊框與陰影 */
+.video-preview {
+  display: block;
+  max-width: 100%;
+  max-height: 420px;
+  background: var(--color-bg-soft);
+}
+
+.gif-result img {
+  display: block;
+  max-width: 100%;
+  max-height: 480px;
+}
+
+/* 開始與取消 */
+.run-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+  margin-top: var(--space-md);
+}
+
+/* 進度：一條細線加等寬數字，不用彩色進度條 */
+.progress {
+  margin-top: var(--space-md);
+}
+
+.progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: 14px;
+}
+
+.progress-head .num {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.progress-line {
+  height: 2px;
+  margin-top: var(--space-xs);
+  background: var(--color-line);
+}
+
+.progress-line > span {
+  display: block;
+  height: 100%;
+  background: var(--color-fg);
+}
+
+@media (max-width: 900px) {
+  .app-head {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 560px) {
+  .app {
+    padding: 40px 24px;
+  }
+
+  .app-head {
+    margin-bottom: 32px;
+  }
+
+  .dropzone {
+    padding: 32px var(--space-sm);
+  }
+
+  .consent-inner {
+    padding: var(--space-sm) 24px;
+  }
+
+  .consent-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* 手機：標題與說明獨占一整行，接著按鈕列獨占一整行，分享靠左、下載全部 (ZIP) 靠右，右邊緣與下方圖片對齊 */
+  .card-head-text {
+    flex-basis: 100%;
+  }
+
+  .card-actions {
+    flex: 1 1 100%;
+    align-items: stretch;
+  }
+
+  .card-actions-row {
+    justify-content: space-between;
+    column-gap: var(--space-sm);
+  }
+
+  /* 按鈕兩側留白縮小，讓分享與下載全部在常見的手機寬度能放進同一行 */
+  .card-actions-row .primary {
+    padding: 12px 16px;
+  }
+
+  .card-actions .error {
+    text-align: left;
+  }
+
+  .tabs {
+    gap: 20px;
+  }
+
+  .options {
+    gap: var(--space-md);
+  }
+}
