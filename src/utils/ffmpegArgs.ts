@@ -30,6 +30,26 @@ export function gifArgs(input: string, output: string, options: GifOptions): str
   ]
 }
 
+/** 起點最大值：影片結尾前 0.1 秒（無條件捨去到 0.1），影片長度未知時為 null（不設上限） */
+export function maxGifStart(videoSeconds: number | null): number | null {
+  if (videoSeconds === null || videoSeconds <= 0) return null
+  return Math.max(0, Math.floor((videoSeconds - 0.1) * 10) / 10)
+}
+
+/**
+ * 整理起點輸入框的文字：小數只留一位（多的直接捨去，和上下箭頭的 0.1 一致）、
+ * 負數改成 0、超過影片長度改成最大值，其餘照原樣保留
+ * （空字串與打到一半的「1.」保持不動，才不會打字時被改掉）
+ */
+export function clampStartInput(input: string, videoSeconds: number | null): string {
+  const raw = input.replace(/^(-?\d*\.\d)\d+$/, '$1')
+  const n = Number(raw)
+  if (raw.trim() === '' || !Number.isFinite(n)) return raw
+  if (n < 0) return '0'
+  const max = maxGifStart(videoSeconds)
+  return max !== null && n > max ? String(max) : raw
+}
+
 /** 轉 GIF 時，起點與長度要符合影片實際長度（長度未知時 duration 給 null，只套用上限） */
 export function clampGifRange(
   start: number,

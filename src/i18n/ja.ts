@@ -15,9 +15,9 @@ export const ja: Messages = {
   },
   common: {
     download: 'ダウンロード',
-    share: '共有 / 写真に保存',
+    share: '共有',
     shareFailed: '共有メニューを開けませんでした。「ダウンロード」をご利用ください。',
-    shareHint: 'スマホでは「共有 / 写真に保存」をタップして、写真アプリに保存してください。',
+    shareHint: 'スマホでは「共有」をタップして、写真アプリに保存してください。',
     reselect: '別の動画を選ぶ',
     cancel: 'キャンセル',
   },
@@ -55,10 +55,11 @@ export const ja: Messages = {
     widthLabel: '幅',
     widthOption: (width) => `${width} px`,
     start: '変換を開始',
-    resultTitle: 'GIF の結果',
+    resultTitle: '結果',
+    sizeLabel: 'ファイルサイズ',
     resultAlt: '変換後の GIF',
     sizeNote: (max) =>
-      `GIF は動画よりファイルサイズがかなり大きくなるため、一度に変換できるのは最大 ${max} 秒です。小さくしたい場合は、フレームレートや幅を下げるか、長さを短くしてください。`,
+      `GIF は動画よりファイルサイズがかなり大きくなるため、一度に変換できるのは最大 ${max} 秒です。ファイルサイズを小さくしたい場合は、フレームレートや幅を下げるか、長さを短くしてください。`,
     outputNote: '映像のみを変換します（音声は含まれません）。',
   },
 }

@@ -416,24 +416,21 @@ select:focus-visible {
   margin-top: var(--space-sm);
 }
 
-/* 壓縮結果的增減：不用顏色，只用字重與正負號 */
-.good {
+/* 結果的檔案大小：標籤是淡色小字，數值用等寬字、較大較粗，一眼看得到 */
+.result-size {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-xs) var(--space-sm);
+  margin: 0 0 var(--space-sm);
   color: var(--color-fg-soft);
-  font-style: normal;
-  font-weight: 400;
+  font-size: 14px;
 }
 
-.bad {
+.result-size .num {
   color: var(--color-fg);
-  font-style: normal;
-  font-weight: 700;
-}
-
-.summary {
-  margin: 0 0 var(--space-md);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 /* 標題下方的隱私說明（整站最重要的一句話，所以放在最上面） */

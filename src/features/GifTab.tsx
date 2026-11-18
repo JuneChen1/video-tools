@@ -5,7 +5,7 @@ import Progress from '../components/Progress'
 import ResultActions from '../components/ResultActions'
 import ShareHint from '../components/ShareHint'
 import { describeError, useI18n } from '../i18n'
-import { clampGifRange, gifArgs } from '../utils/ffmpegArgs'
+import { clampGifRange, clampStartInput, gifArgs, maxGifStart } from '../utils/ffmpegArgs'
 import {
   GIF_DEFAULT_DURATION,
   GIF_DEFAULT_FPS,
@@ -95,7 +95,9 @@ export default function GifTab() {
               preload="metadata"
               onLoadedMetadata={(e) => {
                 const seconds = e.currentTarget.duration
-                setVideoSeconds(Number.isFinite(seconds) ? seconds : null)
+                const known = Number.isFinite(seconds) ? seconds : null
+                setVideoSeconds(known)
+                setStart((old) => clampStartInput(old, known))
               }}
             />
           )}
@@ -112,11 +114,12 @@ export default function GifTab() {
                 id="gif-start"
                 type="number"
                 min={0}
+                max={maxGifStart(videoSeconds) ?? undefined}
                 step={0.1}
                 inputMode="decimal"
                 value={start}
                 disabled={running}
-                onChange={(e) => setStart(e.target.value)}
+                onChange={(e) => setStart(clampStartInput(e.target.value, videoSeconds))}
               />
               <button
                 disabled={running}
@@ -192,13 +195,15 @@ export default function GifTab() {
         <section className="card">
           <div className="card-head">
             <div className="card-head-text">
-              <h2>
-                {m.gif.resultTitle} <small className="num">{formatSize(job.result.size)}</small>
-              </h2>
+              <h2>{m.gif.resultTitle}</h2>
               <ShareHint items={[{ name: outputName, blob: job.result }]} />
             </div>
             <ResultActions tool="gif" item={{ name: outputName, blob: job.result }} />
           </div>
+          <p className="result-size">
+            <span>{m.gif.sizeLabel}</span>
+            <span className="num">{formatSize(job.result.size)}</span>
+          </p>
           <div className="gif-result">
             <img src={resultUrl} alt={m.gif.resultAlt} />
           </div>

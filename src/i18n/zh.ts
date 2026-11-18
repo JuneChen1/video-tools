@@ -13,9 +13,9 @@ export const zh = {
   },
   common: {
     download: '下載',
-    share: '分享 / 儲存到相簿',
+    share: '分享',
     shareFailed: '無法開啟分享選單，請改用「下載」。',
-    shareHint: '手機請點「分享 / 儲存到相簿」存進相簿。',
+    shareHint: '手機請點「分享」，就能存進相簿。',
     reselect: '重新選擇影片',
     cancel: '取消',
   },
@@ -53,7 +53,8 @@ export const zh = {
     widthLabel: '寬度',
     widthOption: (width: number) => `${width} px`,
     start: '開始轉換',
-    resultTitle: 'GIF 結果',
+    resultTitle: '結果',
+    sizeLabel: '檔案大小',
     resultAlt: '轉換後的 GIF',
     sizeNote: (max: number) =>
       `GIF 檔案會比影片大很多，所以一次最多轉 ${max} 秒。想讓檔案小一點，可以降低幀率、寬度或縮短長度。`,

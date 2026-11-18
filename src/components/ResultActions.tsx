@@ -10,7 +10,7 @@ interface Props {
 }
 
 /**
- * 結果區右上角的按鈕：「分享 / 儲存到相簿」（支援時才顯示）與「下載」。
+ * 結果區右上角的按鈕：「分享」（支援時才顯示）與「下載」。
  * 手機（尤其是 iPhone）下載的檔案只會進「檔案 App」，要用分享選單才進得了相簿
  */
 export default function ResultActions({ tool, item }: Props) {
