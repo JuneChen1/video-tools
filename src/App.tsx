@@ -1,7 +1,13 @@
+import { useCallback, useState } from 'react'
 import AnalyticsConsent from './components/AnalyticsConsent'
 import GifTab from './features/GifTab'
+import TrimTab from './features/TrimTab'
 import { useI18n, type Lang } from './i18n'
+import type { Tool } from './analyticsEvents'
 import './App.css'
+
+const TAB_IDS = ['gif', 'trim'] as const satisfies readonly Tool[]
+type TabId = (typeof TAB_IDS)[number]
 
 // 語言名稱固定用該語言自己的寫法，不隨介面語言變動
 const LANGS: { id: Lang; label: string; htmlLang: string }[] = [
@@ -12,6 +18,11 @@ const LANGS: { id: Lang; label: string; htmlLang: string }[] = [
 
 function App() {
   const { lang, m, setLang } = useI18n()
+  const [tab, setTab] = useState<TabId>('gif')
+  // 哪個分頁正在處理影片。ffmpeg 一次只跑一個，另一個分頁要等它結束才能開始
+  const [busyTool, setBusyTool] = useState<Tool | null>(null)
+  const setGifBusy = useCallback((busy: boolean) => setBusyTool(busy ? 'gif' : null), [])
+  const setTrimBusy = useCallback((busy: boolean) => setBusyTool(busy ? 'trim' : null), [])
 
   return (
     <main className="app">
@@ -34,8 +45,27 @@ function App() {
 
       <p className="hint privacy">{m.privacy}</p>
 
-      {/* 目前只有「影片轉 GIF」一個工具，所以沒有分頁；之後新增工具時再加回 .tabs（樣式已保留） */}
-      <GifTab />
+      <nav className="tabs" role="tablist">
+        {TAB_IDS.map((id) => (
+          <button
+            key={id}
+            role="tab"
+            aria-selected={tab === id}
+            className={tab === id ? 'active' : ''}
+            onClick={() => setTab(id)}
+          >
+            {m.tabs[id]}
+          </button>
+        ))}
+      </nav>
+
+      {/* 分頁都保持掛載，切換時不會丟失已選的影片與處理中的進度 */}
+      <div hidden={tab !== 'gif'}>
+        <GifTab otherBusy={busyTool === 'trim'} setBusy={setGifBusy} />
+      </div>
+      <div hidden={tab !== 'trim'}>
+        <TrimTab otherBusy={busyTool === 'gif'} setBusy={setTrimBusy} />
+      </div>
 
       <AnalyticsConsent />
     </main>

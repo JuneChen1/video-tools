@@ -6,6 +6,7 @@ export const ja: Messages = {
   langSwitchLabel: '言語',
   listSep: '、',
   privacy: 'すべてブラウザ内で処理されます。動画がサーバーにアップロードされることはありません。',
+  tabs: { gif: 'GIF 変換', trim: '動画カット' },
   consent: {
     title: 'プライバシー設定',
     text: 'このサイトでは、サイトの改善のために Google Analytics で閲覧数や機能の利用状況を集計しています。動画やファイル名は収集されず、動画はこれまでどおりブラウザ内だけで処理されます。',
@@ -20,9 +21,10 @@ export const ja: Messages = {
     shareHint: 'スマホでは「共有」をタップして、写真アプリに保存してください。',
     reselect: '別の動画を選ぶ',
     cancel: 'キャンセル',
+    busyElsewhere: '別のタブで動画を処理中です。完了してからお試しください。',
   },
   dropzone: {
-    hint: 'ここに動画をドラッグ＆ドロップ、またはクリックしてファイルを選択（MP4、MOV、WebM、MKV などに対応）',
+    hint: 'ここに動画をドラッグ＆ドロップ、またはクリックしてファイルを選択（MP4、MOV、WebM、MKV などの形式に対応）',
     singleOnly: '一度に処理できる動画は 1 本だけです。1 本だけ選んでください。',
     tooBig: (count, mb, names) =>
       `サイズが大きすぎるファイルを ${count} 件スキップしました（1 ファイルの上限 ${mb} MB）：${names}`,
@@ -30,7 +32,7 @@ export const ja: Messages = {
   },
   engine: {
     note: (mb) =>
-      `初回の処理時に、動画処理エンジン（約 ${mb} MB）をダウンロードします。2 回目以降はブラウザのキャッシュが使われます。`,
+      `初回の処理時に、動画処理エンジン（約 ${mb} MB）をダウンロードします。2 回目以降はブラウザのキャッシュを使用します。`,
     downloading: '動画処理エンジンをダウンロード中',
     initializing: '動画処理エンジンを起動中…',
     running: '処理中',
@@ -39,8 +41,8 @@ export const ja: Messages = {
     generic: '処理に失敗しました',
     engineLoadFailed: '動画処理エンジンを読み込めませんでした。接続を確認して、もう一度お試しください。',
     processFailed: 'この動画を処理できませんでした。ファイルをご確認いただくか、別の動画をお試しください。',
-    outOfMemory: (mb) =>
-      `メモリが不足して、この動画を処理できません。より小さい動画（${mb} MB 以下を推奨）を選ぶか、パソコンをご利用ください。`,
+    outOfMemory:
+      'メモリが不足して処理できません。より小さい動画を選ぶか、範囲を短くするか、パソコンをご利用ください。',
   },
   gif: {
     dropLabel: 'GIF に変換する動画を選択',
@@ -61,5 +63,23 @@ export const ja: Messages = {
     sizeNote: (max) =>
       `GIF は動画よりファイルサイズがかなり大きくなるため、一度に変換できるのは最大 ${max} 秒です。ファイルサイズを小さくしたい場合は、フレームレートや幅を下げるか、長さを短くしてください。`,
     outputNote: '映像のみを変換します（音声は含まれません）。',
+  },
+  trim: {
+    dropLabel: 'カットする動画を選択',
+    previewTitle: '元の動画',
+    settingsTitle: 'カット設定',
+    startLabel: '開始位置（秒）',
+    endLabel: '終了位置（秒）',
+    useCurrent: '現在の再生位置を使う',
+    modeLabel: '方式',
+    mode: { fast: '高速', precise: '正確' },
+    fastNote:
+      '高速：処理が速く、画質もそのままです。ただし動画内の決まった位置でしか切れないため、開始位置が指定より数秒早くなることがあります。',
+    preciseNote:
+      '正確：開始・終了位置が正確です。そのぶん時間がかかり、範囲が長いほど待ち時間も長くなります。',
+    rangeInvalid: '終了位置は開始位置より後にしてください。',
+    start: 'カットする',
+    resultTitle: '結果',
+    sizeLabel: 'ファイルサイズ',
   },
 }

@@ -11,19 +11,19 @@ const LANGS = {
     htmlLang: 'zh-Hant',
     title: '影片工具箱',
     description:
-      '免費線上影片轉 GIF：可選擇片段、幀率與寬度，全部在瀏覽器內處理，影片不會上傳到任何伺服器。',
+      '免費線上影片工具：影片轉 GIF、剪輯影片。全部在瀏覽器內處理，影片不會上傳到任何伺服器。',
   },
   en: {
     htmlLang: 'en',
     title: 'Video Toolbox',
     description:
-      'Free online video to GIF converter: choose the clip, frame rate and width. Everything runs in your browser; your videos are never uploaded.',
+      'Free online video tools: convert video to GIF and trim clips. Everything runs in your browser; your videos are never uploaded.',
   },
   ja: {
     htmlLang: 'ja',
     title: '動画ツールボックス',
     description:
-      '無料のオンライン動画 GIF 変換。範囲・フレームレート・幅を選べます。すべてブラウザ内で処理され、動画はアップロードされません。',
+      '無料のオンライン動画ツール。GIF 変換と動画カットに対応。すべてブラウザ内で処理され、動画はアップロードされません。',
   },
 }
 

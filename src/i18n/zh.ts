@@ -4,6 +4,7 @@ export const zh = {
   langSwitchLabel: '語言',
   listSep: '、',
   privacy: '所有處理都在你的瀏覽器內完成，影片不會上傳到任何伺服器。',
+  tabs: { gif: '影片轉 GIF', trim: '剪輯影片' },
   consent: {
     title: '隱私設定',
     text: '本站使用 Google Analytics 統計瀏覽次數與功能使用情況，用來改善網站。不會收集你的影片或檔名，影片仍然只在你的瀏覽器內處理。',
@@ -18,6 +19,7 @@ export const zh = {
     shareHint: '手機請點「分享」，就能存進相簿。',
     reselect: '重新選擇影片',
     cancel: '取消',
+    busyElsewhere: '另一個分頁正在處理影片，請等它完成後再開始。',
   },
   dropzone: {
     hint: '拖放影片到這裡，或點擊選擇檔案（支援 MP4、MOV、WebM、MKV 等常見格式）',
@@ -37,8 +39,7 @@ export const zh = {
     generic: '處理失敗',
     engineLoadFailed: '無法載入影片處理引擎，請檢查網路連線後重試。',
     processFailed: '無法處理這部影片，請確認檔案是否正確，或換一部影片試試。',
-    outOfMemory: (mb: number) =>
-      `記憶體不足，無法處理這部影片。請改選較小的影片（建議在 ${mb} MB 以下），或改用電腦。`,
+    outOfMemory: '記憶體不足，無法處理。請改選較小的影片、縮短剪輯範圍，或改用電腦。',
   },
   gif: {
     dropLabel: '選擇要轉成 GIF 的影片',
@@ -59,6 +60,24 @@ export const zh = {
     sizeNote: (max: number) =>
       `GIF 檔案會比影片大很多，所以一次最多轉 ${max} 秒。想讓檔案小一點，可以降低幀率、寬度或縮短長度。`,
     outputNote: '只轉換畫面，不含聲音。',
+  },
+  trim: {
+    dropLabel: '選擇要剪輯的影片',
+    previewTitle: '原始影片',
+    settingsTitle: '剪輯設定',
+    startLabel: '起點（秒）',
+    endLabel: '終點（秒）',
+    useCurrent: '用目前播放位置',
+    modeLabel: '方式',
+    mode: { fast: '快速', precise: '精準' },
+    fastNote:
+      '快速：速度很快、畫質完全不變，但只能從影片內固定的位置切開，起點可能比設定的早幾秒。',
+    preciseNote:
+      '精準：起點與終點都很準確，但速度較慢，片段越長要等越久。',
+    rangeInvalid: '終點必須大於起點。',
+    start: '剪輯影片',
+    resultTitle: '結果',
+    sizeLabel: '檔案大小',
   },
 }
 

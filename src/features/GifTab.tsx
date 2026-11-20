@@ -5,7 +5,7 @@ import Progress from '../components/Progress'
 import ResultActions from '../components/ResultActions'
 import ShareHint from '../components/ShareHint'
 import { describeError, useI18n } from '../i18n'
-import { clampGifRange, clampStartInput, gifArgs, maxGifStart } from '../utils/ffmpegArgs'
+import { clampGifRange, clampStartInput, gifArgs, maxStartSeconds } from '../utils/ffmpegArgs'
 import {
   GIF_DEFAULT_DURATION,
   GIF_DEFAULT_FPS,
@@ -18,7 +18,13 @@ import {
 import { baseName, formatDuration, formatSize } from '../utils/video'
 import { useObjectUrl, useVideoJob } from './hooks'
 
-export default function GifTab() {
+interface Props {
+  /** 另一個分頁正在處理，現在不能開始 */
+  otherBusy: boolean
+  setBusy: (busy: boolean) => void
+}
+
+export default function GifTab({ otherBusy, setBusy }: Props) {
   const { m } = useI18n()
   const [file, setFile] = useState<File | null>(null)
   const [start, setStart] = useState('0')
@@ -28,7 +34,7 @@ export default function GifTab() {
   // 影片長度由瀏覽器讀取；瀏覽器解不開的影片（例如某些 MKV）讀不到，這時只套用長度上限
   const [videoSeconds, setVideoSeconds] = useState<number | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const job = useVideoJob('gif')
+  const job = useVideoJob('gif', setBusy)
   const sourceUrl = useObjectUrl(file)
   const resultUrl = useObjectUrl(job.result)
 
@@ -114,7 +120,7 @@ export default function GifTab() {
                 id="gif-start"
                 type="number"
                 min={0}
-                max={maxGifStart(videoSeconds) ?? undefined}
+                max={maxStartSeconds(videoSeconds) ?? undefined}
                 step={0.1}
                 inputMode="decimal"
                 value={start}
@@ -181,10 +187,11 @@ export default function GifTab() {
             {running ? (
               <button onClick={job.cancel}>{m.common.cancel}</button>
             ) : (
-              <button className="primary" onClick={startJob}>
+              <button className="primary" disabled={otherBusy} onClick={startJob}>
                 {m.gif.start}
               </button>
             )}
+            {otherBusy && !running && <span className="hint">{m.common.busyElsewhere}</span>}
           </div>
           {job.progress && <Progress progress={job.progress} />}
           {job.error !== null && <p className="error rejected">{describeError(job.error, m)}</p>}

@@ -1,4 +1,5 @@
 import { FFmpeg, FFFSType } from '@ffmpeg/ffmpeg'
+import { MEMORY_FALLBACK_MAX_BYTES } from './limits'
 import { extensionOf, VideoError } from './video'
 
 /**
@@ -152,6 +153,8 @@ export async function runVideoJob(options: JobOptions): Promise<Blob> {
     }
     if (import.meta.env.DEV) console.info(`[ffmpeg] input via ${mounted ? 'WORKERFS' : 'memory copy'}`)
     if (!mounted) {
+      // 退路要把整個檔案讀進記憶體，大檔案一定爆，所以直接回報記憶體不足，不要硬試
+      if (file.size > MEMORY_FALLBACK_MAX_BYTES) throw new VideoError('outOfMemory')
       inputPath = inputName
       await ffmpeg.writeFile(inputName, new Uint8Array(await file.arrayBuffer()))
     }

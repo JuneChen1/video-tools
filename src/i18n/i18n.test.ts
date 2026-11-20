@@ -107,10 +107,10 @@ describe('describeError', () => {
     }
   })
 
-  it('記憶體不足：訊息帶著建議的檔案大小', () => {
-    expect(describeError(samples.outOfMemory, zh)).toContain('100 MB')
-    expect(describeError(samples.outOfMemory, en)).toContain('100 MB')
-    expect(describeError(samples.outOfMemory, ja)).toContain('100 MB')
+  it('記憶體不足：建議改選較小的影片或縮短範圍，不寫死檔案大小（上限已改成可調整）', () => {
+    for (const messages of [zh, en, ja]) {
+      expect(describeError(samples.outOfMemory, messages)).not.toMatch(/\d+ MB/)
+    }
   })
 
   it('不是 VideoError 的錯誤用通用訊息', () => {

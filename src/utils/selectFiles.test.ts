@@ -6,9 +6,10 @@ const f = (name: string, type = 'video/mp4', size = 1000) => ({ name, type, size
 const names = (list: { name: string }[]) => list.map((x) => x.name)
 
 describe('單檔大小上限', () => {
-  it('上限是 100 MB', () => {
-    expect(MAX_FILE_MB).toBe(100)
-    expect(MAX_FILE_BYTES).toBe(100 * 1024 * 1024)
+  it('上限是 650 MB（600.47 MiB 的影片要收得下）', () => {
+    expect(MAX_FILE_MB).toBe(650)
+    expect(MAX_FILE_BYTES).toBe(650 * 1024 * 1024)
+    expect(MAX_FILE_BYTES).toBeGreaterThan(629_633_220) // 實測用的 600.47 MiB 影片
   })
 })
 

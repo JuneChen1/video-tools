@@ -6,7 +6,7 @@
 import { trackEvent, type EventParams } from './analytics'
 import { extensionOf, VideoError } from './utils/video'
 
-export type Tool = 'gif'
+export type Tool = 'gif' | 'trim'
 export type SaveMethod = 'single' | 'share'
 export type RejectReason = 'unsupported' | 'oversized' | 'too_many_files'
 
@@ -48,15 +48,14 @@ export function saveResultParams(input: {
 }
 
 /** 開始處理時的設定（全是固定的選項值） */
-export interface ProcessSettings {
-  tool: Tool
-  fps: number
-  width: number
-  duration: number
-}
+export type ProcessSettings =
+  | { tool: 'gif'; fps: number; width: number; duration: number }
+  | { tool: 'trim'; mode: 'fast' | 'precise' }
 
 export function processStartParams(settings: ProcessSettings): EventParams {
-  return { tool: settings.tool, fps: settings.fps, width: settings.width, duration: settings.duration }
+  return settings.tool === 'gif'
+    ? { tool: 'gif', fps: settings.fps, width: settings.width, duration: settings.duration }
+    : { tool: 'trim', mode: settings.mode }
 }
 
 export interface Rejection {

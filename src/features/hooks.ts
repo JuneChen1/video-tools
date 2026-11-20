@@ -32,8 +32,11 @@ export interface VideoJob {
   reset: () => void
 }
 
-/** 一次影片處理的狀態：進度、結果、錯誤，以及取消 */
-export function useVideoJob(tool: Tool): VideoJob {
+/**
+ * 一次影片處理的狀態：進度、結果、錯誤，以及取消。
+ * setActive 通知外層「這個分頁正在處理」，讓另一個分頁暫時不能開始（ffmpeg 一次只跑一個）
+ */
+export function useVideoJob(tool: Tool, setActive: (active: boolean) => void): VideoJob {
   const [progress, setProgress] = useState<JobProgress | null>(null)
   const [result, setResult] = useState<Blob | null>(null)
   const [error, setError] = useState<unknown>(null)
@@ -58,6 +61,7 @@ export function useVideoJob(tool: Tool): VideoJob {
       setResult(null)
       setError(null)
       setProgress({ stage: 'download', ratio: null })
+      setActive(true)
       try {
         const blob = await runVideoJob({
           ...options,
@@ -75,10 +79,11 @@ export function useVideoJob(tool: Tool): VideoJob {
         if (controllerRef.current === controller) {
           controllerRef.current = null
           setProgress(null)
+          setActive(false)
         }
       }
     },
-    [tool],
+    [tool, setActive],
   )
 
   return { progress, result, error, run, cancel, reset }

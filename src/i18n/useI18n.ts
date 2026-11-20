@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react'
-import { MAX_FILE_MB } from '../utils/limits'
 import { VideoError } from '../utils/video'
 import type { Lang } from './lang'
 import type { Messages } from './zh'
@@ -29,7 +28,7 @@ export function describeError(error: unknown, m: Messages): string {
     case 'processFailed':
       return m.errors.processFailed
     case 'outOfMemory':
-      return m.errors.outOfMemory(MAX_FILE_MB)
+      return m.errors.outOfMemory
     case 'shareFailed':
       return m.common.shareFailed
   }

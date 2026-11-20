@@ -50,6 +50,7 @@ describe('事件參數不含檔名、大小、尺寸', () => {
       width: 480,
       duration: 5,
     })
+    expect(processStartParams({ tool: 'trim', mode: 'fast' })).toEqual({ tool: 'trim', mode: 'fast' })
   })
 })
 
