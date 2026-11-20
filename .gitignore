@@ -29,3 +29,6 @@ develop/
 
 # 由 scripts/copy-ffmpeg.mjs 從 node_modules 複製的 ffmpeg 核心（約 31 MB）
 public/ffmpeg/
+
+# 本機測試用的大影片（不進版控）
+test-videos/

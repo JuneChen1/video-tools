@@ -17,6 +17,8 @@ describe('formatLabel：只送格式縮寫，不送檔名', () => {
     [{ name: 'a.webm', type: 'video/webm' }, 'webm'],
     [{ name: 'a.xyz', type: '' }, 'other'],
     [{ name: 'out.gif', type: 'image/gif' }, 'gif'],
+    [{ name: 'a_1.0s.png', type: 'image/png' }, 'png'],
+    [{ name: 'a_1.0s.jpg', type: 'image/jpeg' }, 'jpeg'],
   ])('%j → %s', (file, expected) => {
     expect(formatLabel(file)).toBe(expected)
   })
@@ -24,6 +26,8 @@ describe('formatLabel：只送格式縮寫，不送檔名', () => {
   it('Blob（沒有檔名）看 type', () => {
     expect(formatLabel({ type: 'video/mp4' })).toBe('mp4')
     expect(formatLabel({ type: 'image/gif' })).toBe('gif')
+    expect(formatLabel({ type: 'image/png' })).toBe('png')
+    expect(formatLabel({ type: 'image/jpeg' })).toBe('jpeg')
     expect(formatLabel({ type: '' })).toBe('other')
   })
 })
@@ -51,6 +55,7 @@ describe('事件參數不含檔名、大小、尺寸', () => {
       duration: 5,
     })
     expect(processStartParams({ tool: 'trim', mode: 'fast' })).toEqual({ tool: 'trim', mode: 'fast' })
+    expect(processStartParams({ tool: 'frame', format: 'png' })).toEqual({ tool: 'frame', format: 'png' })
   })
 })
 

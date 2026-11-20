@@ -6,7 +6,7 @@ export const en: Messages = {
   langSwitchLabel: 'Language',
   listSep: ', ',
   privacy: 'Everything is processed in your browser. Your videos are never uploaded to any server.',
-  tabs: { gif: 'Video to GIF', trim: 'Video Trimmer' },
+  tabs: { gif: 'Video to GIF', trim: 'Video Trimmer', frame: 'Frame Grabber' },
   consent: {
     title: 'Privacy Settings',
     text: 'This site uses Google Analytics to count visits and see which features are used, to improve the site. Your videos and file names are never collected, and videos are still processed only in your browser.',
@@ -82,5 +82,23 @@ export const en: Messages = {
     start: 'Trim video',
     resultTitle: 'Result',
     sizeLabel: 'File size',
+  },
+  frame: {
+    dropLabel: 'Choose a video to capture frames from',
+    previewTitle: 'Original video',
+    settingsTitle: 'Capture settings',
+    stepBack: 'Back 0.1 s',
+    stepForward: 'Forward 0.1 s',
+    currentTime: (seconds) => `Current position: ${seconds.toFixed(1)} s`,
+    formatLabel: 'Format',
+    formatNote: 'PNG is lossless but larger. JPEG files are smaller.',
+    capture: 'Capture frame',
+    resultsTitle: 'Captured frames',
+    timeLabel: (seconds) => `${seconds.toFixed(1)} s`,
+    clearAll: 'Clear all',
+    remove: 'Remove',
+    limit: (max) => `You can keep up to ${max} frames. Download or remove some to capture more.`,
+    unplayable:
+      'This browser cannot play this video, so frames cannot be captured. Try another video (for example MP4).',
   },
 }

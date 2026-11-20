@@ -6,7 +6,7 @@
 import { trackEvent, type EventParams } from './analytics'
 import { extensionOf, VideoError } from './utils/video'
 
-export type Tool = 'gif' | 'trim'
+export type Tool = 'gif' | 'trim' | 'frame'
 export type SaveMethod = 'single' | 'share'
 export type RejectReason = 'unsupported' | 'oversized' | 'too_many_files'
 
@@ -19,9 +19,12 @@ const SHORT_FORMAT: Record<string, string> = {
   avi: 'avi',
   '3gp': '3gp',
   gif: 'gif',
+  png: 'png',
+  jpg: 'jpeg',
+  jpeg: 'jpeg',
 }
 
-/** 把檔案整理成 mp4 / mov / webm / mkv / avi / 3gp / gif / other。看副檔名，沒有副檔名再看 MIME type */
+/** 把檔案整理成 mp4 / mov / webm / mkv / avi / 3gp / gif / png / jpeg / other。看副檔名，沒有副檔名再看 MIME type */
 export function formatLabel(file: Pick<File | Blob, 'type'> & { name?: string }): string {
   const byExt = SHORT_FORMAT[extensionOf(file.name ?? '')]
   if (byExt) return byExt
@@ -51,11 +54,17 @@ export function saveResultParams(input: {
 export type ProcessSettings =
   | { tool: 'gif'; fps: number; width: number; duration: number }
   | { tool: 'trim'; mode: 'fast' | 'precise' }
+  | { tool: 'frame'; format: 'png' | 'jpeg' }
 
 export function processStartParams(settings: ProcessSettings): EventParams {
-  return settings.tool === 'gif'
-    ? { tool: 'gif', fps: settings.fps, width: settings.width, duration: settings.duration }
-    : { tool: 'trim', mode: settings.mode }
+  switch (settings.tool) {
+    case 'gif':
+      return { tool: 'gif', fps: settings.fps, width: settings.width, duration: settings.duration }
+    case 'trim':
+      return { tool: 'trim', mode: settings.mode }
+    case 'frame':
+      return { tool: 'frame', format: settings.format }
+  }
 }
 
 export interface Rejection {

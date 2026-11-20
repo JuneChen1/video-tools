@@ -6,7 +6,7 @@ export const ja: Messages = {
   langSwitchLabel: '言語',
   listSep: '、',
   privacy: 'すべてブラウザ内で処理されます。動画がサーバーにアップロードされることはありません。',
-  tabs: { gif: 'GIF 変換', trim: '動画カット' },
+  tabs: { gif: 'GIF 変換', trim: '動画カット', frame: '静止画の切り出し' },
   consent: {
     title: 'プライバシー設定',
     text: 'このサイトでは、サイトの改善のために Google Analytics で閲覧数や機能の利用状況を集計しています。動画やファイル名は収集されず、動画はこれまでどおりブラウザ内だけで処理されます。',
@@ -81,5 +81,23 @@ export const ja: Messages = {
     start: 'カットする',
     resultTitle: '結果',
     sizeLabel: 'ファイルサイズ',
+  },
+  frame: {
+    dropLabel: '静止画を切り出す動画を選択',
+    previewTitle: '元の動画',
+    settingsTitle: '切り出し設定',
+    stepBack: '0.1 秒戻る',
+    stepForward: '0.1 秒進む',
+    currentTime: (seconds) => `現在位置：${seconds.toFixed(1)} 秒`,
+    formatLabel: '形式',
+    formatNote: 'PNG は画質が劣化しませんが、ファイルサイズが大きめです。JPEG はファイルサイズが小さくなります。',
+    capture: 'このフレームを切り出す',
+    resultsTitle: '切り出した静止画',
+    timeLabel: (seconds) => `${seconds.toFixed(1)} 秒`,
+    clearAll: 'すべてクリア',
+    remove: '削除',
+    limit: (max) => `保存できるのは最大 ${max} 枚です。ダウンロードまたは削除してから続けてください。`,
+    unplayable:
+      'このブラウザではこの動画を再生できないため、静止画を切り出せません。別の動画（例：MP4）をお試しください。',
   },
 }

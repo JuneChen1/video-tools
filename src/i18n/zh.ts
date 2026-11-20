@@ -4,7 +4,7 @@ export const zh = {
   langSwitchLabel: '語言',
   listSep: '、',
   privacy: '所有處理都在你的瀏覽器內完成，影片不會上傳到任何伺服器。',
-  tabs: { gif: '影片轉 GIF', trim: '剪輯影片' },
+  tabs: { gif: '影片轉 GIF', trim: '剪輯影片', frame: '擷取畫面' },
   consent: {
     title: '隱私設定',
     text: '本站使用 Google Analytics 統計瀏覽次數與功能使用情況，用來改善網站。不會收集你的影片或檔名，影片仍然只在你的瀏覽器內處理。',
@@ -78,6 +78,23 @@ export const zh = {
     start: '剪輯影片',
     resultTitle: '結果',
     sizeLabel: '檔案大小',
+  },
+  frame: {
+    dropLabel: '選擇要擷取畫面的影片',
+    previewTitle: '原始影片',
+    settingsTitle: '擷取設定',
+    stepBack: '倒退 0.1 秒',
+    stepForward: '前進 0.1 秒',
+    currentTime: (seconds: number) => `目前位置：${seconds.toFixed(1)} 秒`,
+    formatLabel: '格式',
+    formatNote: 'PNG 畫質無損，檔案較大；JPEG 檔案較小。',
+    capture: '擷取畫面',
+    resultsTitle: '擷取結果',
+    timeLabel: (seconds: number) => `${seconds.toFixed(1)} 秒`,
+    clearAll: '清除全部',
+    remove: '移除',
+    limit: (max: number) => `最多保留 ${max} 張，請先下載或移除不需要的畫面。`,
+    unplayable: '瀏覽器無法播放這部影片，所以無法擷取畫面。請換一部影片（例如 MP4）試試。',
   },
 }
 

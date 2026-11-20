@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react'
 import AnalyticsConsent from './components/AnalyticsConsent'
 import GifTab from './features/GifTab'
+import FrameTab from './features/FrameTab'
 import TrimTab from './features/TrimTab'
 import { useI18n, type Lang } from './i18n'
 import type { Tool } from './analyticsEvents'
 import './App.css'
 
-const TAB_IDS = ['gif', 'trim'] as const satisfies readonly Tool[]
+const TAB_IDS = ['gif', 'trim', 'frame'] as const satisfies readonly Tool[]
 type TabId = (typeof TAB_IDS)[number]
 
 // 語言名稱固定用該語言自己的寫法，不隨介面語言變動
@@ -65,6 +66,10 @@ function App() {
       </div>
       <div hidden={tab !== 'trim'}>
         <TrimTab otherBusy={busyTool === 'gif'} setBusy={setTrimBusy} />
+      </div>
+      {/* 擷取畫面用瀏覽器本身的影片播放，不經過 ffmpeg，所以不受「一次只跑一個」的限制 */}
+      <div hidden={tab !== 'frame'}>
+        <FrameTab />
       </div>
 
       <AnalyticsConsent />

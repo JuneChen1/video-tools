@@ -551,3 +551,56 @@ select:focus-visible {
     gap: var(--space-md);
   }
 }
+
+/* 擷取畫面的結果清單：每列有縮圖、時間與大小、操作；以 hairline 分隔 */
+.capture-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.capture-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.capture-list img {
+  flex: none;
+  width: 120px;
+  height: auto;
+  max-height: 90px;
+  object-fit: contain;
+  background: var(--color-bg-soft);
+}
+
+.capture-info {
+  display: flex;
+  flex: 1 1 160px;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.capture-info strong {
+  font-weight: 500;
+}
+
+.capture-info span {
+  color: var(--color-fg-soft);
+  font-size: 12px;
+}
+
+.capture-actions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs) var(--space-md);
+}
+
+.capture-actions .card-actions {
+  align-items: flex-start;
+}
