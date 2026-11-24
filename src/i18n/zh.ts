@@ -2,6 +2,7 @@ export const zh = {
   htmlLang: 'zh-Hant',
   siteTitle: '影片工具箱',
   langSwitchLabel: '語言',
+  otherTool: '圖片工具箱',
   listSep: '、',
   privacy: '所有處理都在你的瀏覽器內完成，影片不會上傳到任何伺服器。',
   tabs: { gif: '影片轉 GIF', trim: '剪輯影片', frame: '擷取畫面' },

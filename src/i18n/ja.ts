@@ -4,6 +4,7 @@ export const ja: Messages = {
   htmlLang: 'ja',
   siteTitle: '動画ツールボックス',
   langSwitchLabel: '言語',
+  otherTool: '画像ツールボックス',
   listSep: '、',
   privacy: 'すべてブラウザ内で処理されます。動画がサーバーにアップロードされることはありません。',
   tabs: { gif: 'GIF 変換', trim: '動画カット', frame: '静止画の切り出し' },

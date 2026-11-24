@@ -4,6 +4,7 @@ export const en: Messages = {
   htmlLang: 'en',
   siteTitle: 'Video Toolbox',
   langSwitchLabel: 'Language',
+  otherTool: 'Image Toolbox',
   listSep: ', ',
   privacy: 'Everything is processed in your browser. Your videos are never uploaded to any server.',
   tabs: { gif: 'Video to GIF', trim: 'Video Trimmer', frame: 'Frame Grabber' },
