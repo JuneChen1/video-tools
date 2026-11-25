@@ -98,6 +98,22 @@ export function createAnalytics(deps: AnalyticsDeps): Analytics {
   }
 }
 
+/**
+ * 產生清除 cookie 用的字串。GA4 預設把 cookie 設在上層網域（例如 videotools.junenaga.com 的 cookie 會在 .junenaga.com），
+ * 刪除時沒帶 domain 只會刪到 host-only 的那份，所以要對主機名稱的每一層都送一次過期設定
+ */
+export function expiredCookieStrings(names: string[], hostname: string): string[] {
+  const parts = hostname.split('.')
+  // host-only，加上 a.b.c → .a.b.c、.b.c（至少兩層，不嘗試 .com 這種頂級網域）
+  const domains = ['']
+  if (parts.length >= 2 && !/^[\d.]+$/.test(hostname) && !hostname.includes(':')) {
+    for (let i = 0; i <= parts.length - 2; i++) domains.push(`; domain=.${parts.slice(i).join('.')}`)
+  }
+  return names.flatMap((name) =>
+    domains.map((domain) => `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${domain}`),
+  )
+}
+
 let instance: Analytics | null = null
 
 function real(): Analytics {
@@ -108,8 +124,8 @@ function real(): Analytics {
     win: window as unknown as AnalyticsDeps['win'],
     doc: document as unknown as AnalyticsDeps['doc'],
     clearCookies: (names) => {
-      for (const name of names) {
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+      for (const cookie of expiredCookieStrings(names, location.hostname)) {
+        document.cookie = cookie
       }
     },
   })

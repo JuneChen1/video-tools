@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createAnalytics, isAnalyticsEnabled, type AnalyticsDeps } from './analytics'
+import { createAnalytics, expiredCookieStrings, isAnalyticsEnabled, type AnalyticsDeps } from './analytics'
 
 const ID = 'G-EJQ7YWC4GN'
 
@@ -155,6 +155,32 @@ describe('disable 與再次同意（撤回同意）', () => {
     const { analytics, clearCookies } = setup({ id: undefined })
     analytics.disable()
     expect(clearCookies).not.toHaveBeenCalled()
+  })
+})
+
+describe('expiredCookieStrings', () => {
+  const EXP = 'expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
+
+  it('子網域：清 host-only，以及每一層上層網域（不含頂級網域）', () => {
+    expect(expiredCookieStrings(['_ga'], 'videotools.junenaga.com')).toEqual([
+      `_ga=; ${EXP}`,
+      `_ga=; ${EXP}; domain=.videotools.junenaga.com`,
+      `_ga=; ${EXP}; domain=.junenaga.com`,
+    ])
+  })
+
+  it('每個 cookie 名稱都要清', () => {
+    expect(expiredCookieStrings(['_ga', '_ga_X'], 'junenaga.com')).toEqual([
+      `_ga=; ${EXP}`,
+      `_ga=; ${EXP}; domain=.junenaga.com`,
+      `_ga_X=; ${EXP}`,
+      `_ga_X=; ${EXP}; domain=.junenaga.com`,
+    ])
+  })
+
+  it('localhost、IP 只清 host-only', () => {
+    expect(expiredCookieStrings(['_ga'], 'localhost')).toEqual([`_ga=; ${EXP}`])
+    expect(expiredCookieStrings(['_ga'], '127.0.0.1')).toEqual([`_ga=; ${EXP}`])
   })
 })
 
