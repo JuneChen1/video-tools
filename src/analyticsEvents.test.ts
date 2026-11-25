@@ -19,6 +19,12 @@ describe('formatLabel：只送格式縮寫，不送檔名', () => {
     [{ name: 'out.gif', type: 'image/gif' }, 'gif'],
     [{ name: 'a_1.0s.png', type: 'image/png' }, 'png'],
     [{ name: 'a_1.0s.jpg', type: 'image/jpeg' }, 'jpeg'],
+    // 副檔名、MIME 子類型是原型鏈上的名稱時，不能查到函式
+    [{ name: 'a.constructor', type: '' }, 'other'],
+    [{ name: 'a.constructor', type: 'video/mp4' }, 'mp4'], // 副檔名查不到，改看 MIME
+    [{ name: 'a.toString', type: '' }, 'other'],
+    [{ name: 'a', type: 'video/constructor' }, 'other'],
+    [{ name: 'a.__proto__', type: '' }, 'other'],
   ])('%j → %s', (file, expected) => {
     expect(formatLabel(file)).toBe(expected)
   })

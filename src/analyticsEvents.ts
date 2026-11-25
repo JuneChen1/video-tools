@@ -24,14 +24,18 @@ const SHORT_FORMAT: Record<string, string> = {
   jpeg: 'jpeg',
 }
 
+/** 只查自己的屬性：副檔名與 MIME 子類型都來自使用者，不能讓 constructor 這類原型鏈名稱查到東西 */
+const shortFormat = (key: string): string | undefined =>
+  Object.hasOwn(SHORT_FORMAT, key) ? SHORT_FORMAT[key] : undefined
+
 /** 把檔案整理成 mp4 / mov / webm / mkv / avi / 3gp / gif / png / jpeg / other。看副檔名，沒有副檔名再看 MIME type */
 export function formatLabel(file: Pick<File | Blob, 'type'> & { name?: string }): string {
-  const byExt = SHORT_FORMAT[extensionOf(file.name ?? '')]
+  const byExt = shortFormat(extensionOf(file.name ?? ''))
   if (byExt) return byExt
   const subtype = file.type.split('/')[1]
   if (subtype === 'quicktime') return 'mov'
   if (subtype === 'x-matroska') return 'mkv'
-  return SHORT_FORMAT[subtype ?? ''] ?? 'other'
+  return shortFormat(subtype ?? '') ?? 'other'
 }
 
 export function filesAddedParams(tool: Tool, file: Pick<File, 'name' | 'type'>): EventParams {

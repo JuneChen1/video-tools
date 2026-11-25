@@ -109,7 +109,8 @@ const COPY_CONTAINERS: Record<string, string> = {
  * 其他（m4v、avi、3gp…）與精準模式一律輸出 mp4
  */
 export function trimOutput(inputExt: string, mode: TrimMode): { ext: string; mime: string } {
-  if (mode === 'fast' && inputExt in COPY_CONTAINERS) return { ext: inputExt, mime: COPY_CONTAINERS[inputExt] }
+  // 副檔名由使用者決定，用 hasOwn 避免 constructor、toString 這類原型鏈上的名稱被當成容器
+  if (mode === 'fast' && Object.hasOwn(COPY_CONTAINERS, inputExt)) return { ext: inputExt, mime: COPY_CONTAINERS[inputExt] }
   return { ext: 'mp4', mime: 'video/mp4' }
 }
 

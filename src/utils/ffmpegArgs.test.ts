@@ -157,6 +157,12 @@ describe('trimOutput', () => {
     expect(trimOutput('mp4', 'fast')).toEqual({ ext: 'mp4', mime: 'video/mp4' })
   })
 
+  it('副檔名是原型鏈上的名稱（constructor、toString…）也當成其他容器', () => {
+    for (const ext of ['constructor', 'toString', '__proto__', 'hasOwnProperty']) {
+      expect(trimOutput(ext, 'fast')).toEqual({ ext: 'mp4', mime: 'video/mp4' })
+    }
+  })
+
   it('其他容器與精準模式一律輸出 mp4', () => {
     expect(trimOutput('avi', 'fast')).toEqual({ ext: 'mp4', mime: 'video/mp4' })
     expect(trimOutput('m4v', 'fast')).toEqual({ ext: 'mp4', mime: 'video/mp4' })
