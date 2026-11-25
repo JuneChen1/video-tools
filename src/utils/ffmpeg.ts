@@ -1,6 +1,6 @@
 import { FFmpeg, FFFSType } from '@ffmpeg/ffmpeg'
 import { MEMORY_FALLBACK_MAX_BYTES } from './limits'
-import { extensionOf, VideoError } from './video'
+import { extensionOf, looksLikeOutOfMemory, VideoError } from './video'
 
 /**
  * ffmpeg.wasm（單執行緒版）的執行引擎。
@@ -77,8 +77,7 @@ function loadCoreUrls(onProgress: (p: JobProgress) => void, signal: AbortSignal)
 function toVideoError(error: unknown): VideoError {
   if (error instanceof VideoError) return error
   const text = String(error instanceof Error ? error.message : error)
-  // wasm 記憶體不足時的常見訊息
-  return /memory|alloc|oom|out of bounds|rangeerror/i.test(text)
+  return looksLikeOutOfMemory(text)
     ? new VideoError('outOfMemory')
     : new VideoError('processFailed')
 }
@@ -119,7 +118,7 @@ export async function runVideoJob(options: JobOptions): Promise<Blob> {
       await ffmpeg.load(urls)
     } catch (error) {
       if (signal.aborted) throw abortError()
-      throw error instanceof Error && /memory|alloc/i.test(error.message)
+      throw error instanceof Error && looksLikeOutOfMemory(error.message)
         ? new VideoError('outOfMemory')
         : new VideoError('engineLoadFailed')
     }

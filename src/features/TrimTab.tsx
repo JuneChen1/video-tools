@@ -32,6 +32,8 @@ export default function TrimTab({ otherBusy, setBusy }: Props) {
   const [start, setStart] = useState('0')
   // 空字串代表「到影片結尾」；讀到影片長度後會自動填入
   const [end, setEnd] = useState('')
+  // 終點是程式自動填入、使用者沒動過：實際處理時視為「到影片結尾」，不然無條件捨去到 0.1 秒的終點會切掉尾端最多 0.1 秒
+  const [endAuto, setEndAuto] = useState(false)
   const [mode, setMode] = useState<TrimMode>('fast')
   // 影片長度由瀏覽器讀取；瀏覽器解不開的影片（例如某些 MKV）讀不到，這時終點可以留空（到結尾）
   const [videoSeconds, setVideoSeconds] = useState<number | null>(null)
@@ -44,7 +46,7 @@ export default function TrimTab({ otherBusy, setBusy }: Props) {
 
   const running = job.progress !== null
   const startSeconds = start.trim() === '' ? 0 : Number(start)
-  const endSeconds = end.trim() === '' ? null : Number(end)
+  const endSeconds = endAuto || end.trim() === '' ? null : Number(end)
   const valid = isValidTrimRange(startSeconds, endSeconds)
 
   function startJob() {
@@ -81,6 +83,7 @@ export default function TrimTab({ otherBusy, setBusy }: Props) {
               setVideoSeconds(null)
               setStart('0')
               setEnd('')
+              setEndAuto(false)
               setFile(picked)
             }}
           />
@@ -119,12 +122,13 @@ export default function TrimTab({ otherBusy, setBusy }: Props) {
                 const known = Number.isFinite(seconds) ? seconds : null
                 setVideoSeconds(known)
                 setStart((old) => clampSecondsInput(old, maxStartSeconds(known)))
-                // 終點預設是影片結尾；已經有填的就只做範圍整理
-                setEnd((old) =>
-                  old === '' && known !== null
-                    ? String(maxTrimEnd(known))
-                    : clampSecondsInput(old, maxTrimEnd(known)),
-                )
+                // 終點預設是影片結尾（顯示捨去後的數字，但視為沒動過）；已經有填的就只做範圍整理
+                if (end === '' && known !== null) {
+                  setEnd(String(maxTrimEnd(known)))
+                  setEndAuto(true)
+                } else {
+                  setEnd((old) => clampSecondsInput(old, maxTrimEnd(known)))
+                }
               }}
             />
           )}
@@ -166,9 +170,18 @@ export default function TrimTab({ otherBusy, setBusy }: Props) {
                 inputMode="decimal"
                 value={end}
                 disabled={running}
-                onChange={(e) => setEnd(clampSecondsInput(e.target.value, maxTrimEnd(videoSeconds)))}
+                onChange={(e) => {
+                  setEndAuto(false)
+                  setEnd(clampSecondsInput(e.target.value, maxTrimEnd(videoSeconds)))
+                }}
               />
-              <button disabled={running} onClick={() => setCurrentTime(setEnd, maxTrimEnd(videoSeconds))}>
+              <button
+                disabled={running}
+                onClick={() => {
+                  setEndAuto(false)
+                  setCurrentTime(setEnd, maxTrimEnd(videoSeconds))
+                }}
+              >
                 {m.trim.useCurrent}
               </button>
             </div>

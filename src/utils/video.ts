@@ -39,11 +39,22 @@ export function formatDuration(seconds: number): string {
   return `${m}:${String(s).padStart(2, '0')}`
 }
 
+/** 下載網址保留多久（毫秒）。太早釋放會讓大檔案（最大約 600 MB）在手機上下載到一半失敗或被截斷 */
+const DOWNLOAD_URL_TTL_MS = 60_000
+
 export function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
   a.download = filename
   a.click()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
+  setTimeout(() => URL.revokeObjectURL(url), DOWNLOAD_URL_TTL_MS)
+}
+
+/**
+ * 錯誤訊息像不像記憶體不足（wasm 記憶體耗盡、配置失敗、RangeError）。
+ * 用單字邊界比對，避免 room、zoom 之類的字被誤判成 oom
+ */
+export function looksLikeOutOfMemory(text: string): boolean {
+  return /\bmemory\b|\b(?:m?alloc\w*|oom)\b|out of bounds|rangeerror/i.test(text)
 }
