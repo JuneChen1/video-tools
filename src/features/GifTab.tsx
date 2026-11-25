@@ -129,7 +129,10 @@ export default function GifTab({ otherBusy, setBusy }: Props) {
               />
               <button
                 disabled={running}
-                onClick={() => setStart(String(Math.round((videoRef.current?.currentTime ?? 0) * 10) / 10))}
+                onClick={() => {
+                  const now = Math.round((videoRef.current?.currentTime ?? 0) * 10) / 10
+                  setStart(clampStartInput(String(now), videoSeconds))
+                }}
               >
                 {m.gif.useCurrent}
               </button>
