@@ -17,6 +17,8 @@ const JPEG_QUALITY = 0.92
 const STEP_SECONDS = 0.1
 /** 最多保留幾張：每張都留在記憶體裡（4K 的 PNG 可能超過 10 MB） */
 const MAX_CAPTURES = 20
+/** 等拖曳進度條後的畫面更新（seeked）最多等多久（毫秒） */
+const SEEK_TIMEOUT_MS = 3000
 
 interface Capture {
   id: number
@@ -41,6 +43,8 @@ export default function FrameTab() {
   const [captures, setCaptures] = useState<Capture[]>([])
   const videoRef = useRef<HTMLVideoElement>(null)
   const nextId = useRef(1)
+  // 正在擷取中（非同步），避免連點時重複執行
+  const capturingRef = useRef(false)
   // 目前畫面上每一張的網址，離開頁面時一併釋放
   const urlsRef = useRef<string[]>([])
   const sourceUrl = useObjectUrl(file)
@@ -61,36 +65,53 @@ export default function FrameTab() {
 
   async function capture() {
     const video = videoRef.current
-    if (!file || !video || video.videoWidth === 0 || captures.length >= MAX_CAPTURES) return
-    // 剛拖曳過進度條時，等畫面真的換好再擷取，不然會拍到上一個位置
-    if (video.seeking) await new Promise((r) => video.addEventListener('seeked', r, { once: true }))
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    ctx.drawImage(video, 0, 0)
-    const at = video.currentTime
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, MIME[format], format === 'jpeg' ? JPEG_QUALITY : undefined),
-    )
-    if (!blob) return
-    trackProcessStart({ tool: 'frame', format })
-    const url = URL.createObjectURL(blob)
-    urlsRef.current.push(url)
-    const id = nextId.current++
-    setCaptures((old) => [
-      ...old,
-      {
-        id,
-        name: `${baseName(file.name)}_${at.toFixed(1)}s.${EXT[format]}`,
-        blob,
-        url,
-        time: at,
-        width: canvas.width,
-        height: canvas.height,
-      },
-    ])
+    // 擷取中（等 seeked、toBlob）再按一次要忽略，否則上限檢查用的是舊的張數，連點會超過 MAX_CAPTURES
+    if (!file || !video || video.videoWidth === 0 || captures.length >= MAX_CAPTURES || capturingRef.current) return
+    capturingRef.current = true
+    try {
+      // 剛拖曳過進度條時，等畫面真的換好再擷取，不然會拍到上一個位置。
+      // seeked 一直沒來（例如影片出錯）也不能永遠卡住，所以設逾時
+      if (video.seeking) {
+        await new Promise<void>((resolve) => {
+          const done = () => {
+            clearTimeout(timer)
+            video.removeEventListener('seeked', done)
+            resolve()
+          }
+          const timer = setTimeout(done, SEEK_TIMEOUT_MS)
+          video.addEventListener('seeked', done)
+        })
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+      ctx.drawImage(video, 0, 0)
+      const at = video.currentTime
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, MIME[format], format === 'jpeg' ? JPEG_QUALITY : undefined),
+      )
+      if (!blob) return
+      trackProcessStart({ tool: 'frame', format })
+      const url = URL.createObjectURL(blob)
+      urlsRef.current.push(url)
+      const id = nextId.current++
+      setCaptures((old) => [
+        ...old,
+        {
+          id,
+          name: `${baseName(file.name)}_${at.toFixed(1)}s.${EXT[format]}`,
+          blob,
+          url,
+          time: at,
+          width: canvas.width,
+          height: canvas.height,
+        },
+      ])
+    } finally {
+      capturingRef.current = false
+    }
   }
 
   function step(delta: number) {
