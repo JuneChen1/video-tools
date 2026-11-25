@@ -46,18 +46,20 @@ async function download(
   if (!response.ok || !response.body) throw new Error(`HTTP ${response.status}`)
   const length = Number(response.headers.get('content-length'))
   const total = !response.headers.get('content-encoding') && length > 0 ? length : fallbackBytes
-  const reader = response.body.getReader()
-  const chunks: Uint8Array<ArrayBuffer>[] = []
+  // 資料流經計數器只回報進度，不在 JS 裡留一份：交給 Response.blob() 由瀏覽器自己收成 Blob，
+  // 避免「先把 31 MB 存進陣列、再複製成 Blob」讓記憶體峰值加倍（手機上很吃緊）
   let received = 0
-  for (;;) {
-    const { done, value } = await reader.read()
-    if (done) break
-    chunks.push(value as Uint8Array<ArrayBuffer>)
-    received += value.length
-    onRatio(Math.min(received / total, 0.99))
-  }
+  const counter = new TransformStream<Uint8Array, Uint8Array>({
+    transform(chunk, controller) {
+      received += chunk.length
+      onRatio(Math.min(received / total, 0.99))
+      controller.enqueue(chunk)
+    },
+  })
+  const body = await new Response(response.body.pipeThrough(counter)).blob()
   onRatio(1)
-  return URL.createObjectURL(new Blob(chunks, { type: mime }))
+  // 重新包一層只為了指定 MIME type（不會複製資料）
+  return URL.createObjectURL(new Blob([body], { type: mime }))
 }
 
 function loadCoreUrls(onProgress: (p: JobProgress) => void, signal: AbortSignal): Promise<CoreUrls> {
